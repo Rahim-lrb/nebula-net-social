@@ -123,7 +123,7 @@ const Login = () => {
       </div>
 
       <div className="flex-col justify-center text-lg gap-4 font-bold">
-        some accounts to test:
+        some accounts to test the project:
         <p>rahim.laribi16@gmail.com ------- 123azeqsd</p>
         <p>moh123@gmail.com ------- 123azeqsd</p>
       </div>

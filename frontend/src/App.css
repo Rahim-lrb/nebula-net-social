@@ -1,0 +1,18 @@
+:root {
+  --color-primary: #1A1A2E; /* Dark Navy */
+  --color-secondary: #16213E; /* Darker Navy */
+  --color-accent: #0F3460; /* Deep Blue */
+  --color-cardBackground: #1D2A3C; /* Lighter Dark Navy */
+  --color-text: #E5E5E5; /* Light Gray */
+  --color-accentText: #A9A9A9; /* Gray */
+  --color-border: #2C2C54; /* Subtle Grayish Blue */
+  --color-buttonBackground: #16213E; /* Darker Navy */
+  --color-buttonHoverBackground: #0F3460; /* Deep Blue */
+}
+
+body {
+  /* background-color: var(--color-primary); */
+  background-color:#0c0e17;
+  color: var(--color-text);
+}
+/* #0c0e17 */

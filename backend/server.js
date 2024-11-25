@@ -40,7 +40,7 @@ const app = express()
 // * middlewares
 app.use(express.json());
 app.use((req, res, next) => { console.log(req.path, req.method); next()})
-app.use(cors({ origin: true, credentials: true }))
+app.use(cors({ origin: true, methods: ["GET", "POST", "PUT", "DELETE"], credentials: true }))
 app.use(cookieParser());
 
 // if (process.env.NODE_ENV === 'development') {

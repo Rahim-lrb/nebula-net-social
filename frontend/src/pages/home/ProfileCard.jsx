@@ -12,7 +12,7 @@ const ProfileCard = () => {
   return (
     <div className="relative bg-gray-800 text-white rounded-lg">
       {/* Cover Image */}
-      <div className="h-32 bg-gray-700">
+      <div className="h-32 bg-gray-700 w-full">
         <img
           src={authUser.coverImg ? authUser.coverImg : "https://via.placeholder.com/600x200?text=Cover+Image"}
           alt="Cover"

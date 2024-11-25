@@ -22,7 +22,7 @@ const fetchSearchResults = async (query) => {
       throw new Error(data.error);
     }
 
-    return data.results; // Adjust based on the actual response structure
+    return data.results;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -34,7 +34,7 @@ const SearchBar = ({ onSelect }) => {
     ['searchResults', searchQuery],
     () => fetchSearchResults(searchQuery),
     {
-      enabled: searchQuery.length > 0, // Fetch only if searchQuery is not empty
+      enabled: searchQuery.length > 0,
       retry: false,
       refetchOnWindowFocus: false,
     }

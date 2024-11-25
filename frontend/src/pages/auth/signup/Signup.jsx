@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/loading/Loading";
 
@@ -10,12 +10,25 @@ const Signup = () => {
         email: "",
         password: "",
     });
-    const [ load, setLoad ] = useState(false)
+    const [validationError, setValidationError] = useState("");
+    const [load, setLoad] = useState(false);
 
+    const queryClient = useQueryClient();
+
+    // Validation function
+    const validateForm = () => {
+        if (!formData.fullName) return "Full name is required";
+        if (!formData.username) return "Username is required";
+        if (!formData.email) return "Email is required";
+        if (!/\S+@\S+\.\S+/.test(formData.email)) return "Invalid email address";
+        if (!formData.password) return "Password is required";
+        if (formData.password.length < 6) return "Password must be at least 6 characters long";
+        return null;
+    };
 
     const { mutate: signupMutation, isLoading, isError, error } = useMutation({
         mutationFn: async ({ fullName, username, email, password }) => {
-            setLoad(true)
+            setLoad(true);
             const res = await fetch(`/api/auth/signup`, {
                 method: "POST",
                 headers: {
@@ -25,10 +38,10 @@ const Signup = () => {
             });
 
             const data = await res.json();
-            setLoad(false)
+            setLoad(false);
 
             if (!res.ok) {
-                throw new Error(data.message || "Signup failed");
+                throw new Error(data.error || "Signup failed");
             }
         },
         onSuccess: () => {
@@ -38,6 +51,15 @@ const Signup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Perform validation
+        const error = validateForm();
+        if (error) {
+            setValidationError(error);
+            return;
+        }
+
+        setValidationError("");
         signupMutation(formData);
     };
 
@@ -71,6 +93,7 @@ const Signup = () => {
                                 value={formData.fullName}
                                 onChange={handleInputChange}
                                 required
+                                disabled={isLoading}
                                 className="block w-full rounded-md bg-gray-800 border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm sm:leading-6 px-4"
                             />
                         </div>
@@ -88,6 +111,7 @@ const Signup = () => {
                                 value={formData.username}
                                 onChange={handleInputChange}
                                 required
+                                disabled={isLoading}
                                 className="block w-full rounded-md bg-gray-800 border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm sm:leading-6 px-4"
                             />
                         </div>
@@ -105,6 +129,7 @@ const Signup = () => {
                                 value={formData.email}
                                 onChange={handleInputChange}
                                 required
+                                disabled={isLoading}
                                 className="block w-full rounded-md bg-gray-800 border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm sm:leading-6 px-4"
                             />
                         </div>
@@ -122,20 +147,31 @@ const Signup = () => {
                                 value={formData.password}
                                 onChange={handleInputChange}
                                 required
+                                disabled={isLoading}
                                 className="block w-full rounded-md bg-gray-800 border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm sm:leading-6 px-4"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <button type="submit" className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ${load ? "opacity-75" : ""} disabled:bg-indigo-800`} disabled={load} >
+                        <button
+                            type="submit"
+                            className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ${
+                                load ? "opacity-75" : ""
+                            } disabled:bg-indigo-800`}
+                            disabled={load}
+                        >
                             {load ? <Loading /> : "Sign up"}
                         </button>
+                        {validationError && <p className="text-red-400 text-sm mt-2">{validationError}</p>}
+                        {isError && <p className="text-red-400 text-sm mt-2">{error.message}</p>}
                     </div>
                 </form>
 
                 <div className="mt-6 text-center text-sm text-gray-400">
-                    <Link to="/login" className="text-indigo-500 hover:text-indigo-400">You have an account?</Link>
+                    <Link to="/login" className="text-indigo-500 hover:text-indigo-400">
+                        You have an account?
+                    </Link>
                 </div>
             </div>
         </div>

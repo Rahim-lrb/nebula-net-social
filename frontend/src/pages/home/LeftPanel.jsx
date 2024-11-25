@@ -3,7 +3,7 @@ import ProfileCard from './ProfileCard'
 
 export default function LeftPanel() {
   return (
-    <div>
+    <div className='w-full pr-20'>
       <ProfileCard/>
     </div>
   )
